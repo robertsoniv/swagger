@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OrderCloud.Model;
+using {{packageName}}.Model;
 
 namespace {{packageName}}.Client
 {
@@ -39,6 +39,11 @@ namespace {{packageName}}.Client
         /// </summary>
         /// <value>Impersonation token.</value>
         public AccessToken ImpersonationToken { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public bool Impersonate = false;
+        public bool StayImpersonating = false;
 
         /// <summary>
         /// Initializes a new instance of the Configuration class with different settings
@@ -247,13 +252,17 @@ namespace {{packageName}}.Client
           set {
             _accessToken = value;
           } get {
-            if(ImpersonationToken != null && !String.IsNullOrEmpty(ImpersonationToken._AccessToken))
+            if(Impersonate != false && !string.IsNullOrEmpty(ImpersonationToken._AccessToken))
             {
-              return ImpersonationToken;
-            } else {
-              return _accessToken;
+                Impersonate = false;
+                return ImpersonationToken;
             }
-          }
+            if (StayImpersonating && !string.IsNullOrEmpty(ImpersonationToken._AccessToken))
+            {
+                return ImpersonationToken;
+            }
+            return _accessToken;
+            }
         }
 
         /// <summary>
